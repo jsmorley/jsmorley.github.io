@@ -19,10 +19,10 @@ img:hover {
 
 a:link {
 	text-decoration:none;
-	 /*font-family: "Segoe UI", Arial, Helvetica, sans-serif;*/
+	font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 	font-size: 22px;
-	 /*font-weight:Normal;*/
-	 /*color: #eaf5ff;*/
+	font-weight:Normal;
+	color: #eaf5ff;
 }
 a:visited  {
 	text-decoration:none;
