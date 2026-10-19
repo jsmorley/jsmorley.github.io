@@ -292,12 +292,6 @@ window.HOMEPAGE_PUBLISHED = {
           "id": "RainmeterFolder.htm-10"
         },
         {
-          "title": "CSS Reference",
-          "url": "http://www.w3schools.com/css/default.asp",
-          "image": "Images/rm_CSS.jpg",
-          "id": "RainmeterFolder.htm-11"
-        },
-        {
           "title": "Rainmeter on Reddit",
           "url": "http://www.reddit.com/r/Rainmeter/",
           "image": "Images/rm_Reddit.jpg",
