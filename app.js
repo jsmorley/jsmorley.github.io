@@ -8,7 +8,7 @@
   let hash = 0;
   for (let i = 0; i < sourceJSON.length; i++) hash = ((hash << 5) - hash + sourceJSON.charCodeAt(i)) | 0;
   const base = String(hash);
-  let state = clone(source), database, editing = false, organizing = false, formAction, imageValue, focusBefore;
+  let state = clone(source), database, editing = false, editorDevice = false, organizing = false, formAction, imageValue, focusBefore;
   const storageKey = 'jsmorley-homepage-v1';
   const safeURL = value => {
     if (typeof value !== 'string' || !value.trim() || /[\u0000-\u001f]/.test(value)) return false;
@@ -91,6 +91,7 @@
     document.title = p.title;
     $('page-label').textContent = p.title;
     $('toolbar').hidden = !editing;
+    $('open-editor').hidden = editing || !editorDevice;
     $('grid').classList.toggle('organizing', organizing);
     $('organize').textContent = organizing ? 'Done organizing' : 'Organize';
     $('grid').replaceChildren();
@@ -318,8 +319,10 @@
   async function initialize() {
     try { editing = new URLSearchParams(location.search).get('edit') === '1' || localStorage.getItem('homepage-editor') === '1'; }
     catch { editing = new URLSearchParams(location.search).get('edit') === '1'; }
+    try { editorDevice = localStorage.getItem('homepage-editor-device') === '1'; } catch { /* storage unavailable */ }
     if (editing) {
-      try { localStorage.setItem('homepage-editor', '1'); } catch { /* storage fallback below */ }
+      editorDevice = true;
+      try { localStorage.setItem('homepage-editor', '1'); localStorage.setItem('homepage-editor-device', '1'); } catch { /* storage fallback below */ }
       let record;
       try { database = await openDB(); record = await dbRead(); }
       catch { try { record = JSON.parse(localStorage.getItem(storageKey)); } catch { /* use published data */ } }

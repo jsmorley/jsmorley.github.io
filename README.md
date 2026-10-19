@@ -8,6 +8,8 @@ Double-click `start-local.cmd`, then open http://localhost:4000. Keep the server
 
 The default view is read-only. Open http://localhost:4000/editor.html to enable editing in that PC browser. Bookmark this editor address. Once enabled, editing stays enabled in that browser until you select **Read-only view**. Read-only view shows the published data; reopening the editor restores your unpublished draft.
 
+After you open the editor once, that browser remembers it is your editing device. In read-only view, a small **Edit** button appears in the upper right and opens `editor.html`. Other browsers and devices do not show this button until you explicitly open the editor there. Browser preferences are specific to each address: on the published site, open https://jsmorley.github.io/editor.html once on your PC to enable its button. Clearing browser site data also clears this preference.
+
 ## Edit
 
 - Click **…** on a tile to change its title, URL, or image, or delete it. Drag an image into the panel or use the file picker. Uploaded images are embedded in your data, so no separate image upload is needed. Existing folder tiles open their folder; use **Folders** to edit page properties.
