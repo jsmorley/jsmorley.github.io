@@ -69,7 +69,7 @@ window.HOMEPAGE_PUBLISHED = {
           "id": "index.htm-8"
         },
         {
-          "title": "Monumental",
+          "title": "Monumental NHL",
           "url": "https://www.monumentalsportsnetwork.com/",
           "image": "Images/MonumentalSports.jpg",
           "id": "index.htm-9"
