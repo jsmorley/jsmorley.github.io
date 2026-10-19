@@ -28,7 +28,7 @@ In the local PC editor, select **Publish to GitHub**, optionally adjust the comm
 
 The helper maintains its own checkout under `.publisher/repository` and refreshes published data when started. Do not edit this checkout manually. It uses `C:\Program Files\PuTTY\plink.exe -batch` and the existing Pageant key. Keep Pageant running. The hosted editor directs you to the PC editor for publishing. Your draft belongs to the browser and address where you edited it; use Backup and Import backup to move an unpublished draft between the hosted and local editors if needed.
 
-### Initial deployment or manual export
+### Initial deployment
 
 For the first deployment, copy these files and directories into the root of your `jsmorley.github.io` repository and commit/push them:
 
@@ -57,13 +57,9 @@ UZAFolder.htm
 
 `index.html` is the normal GitHub Pages entry point; `index.htm` and the original folder addresses also work. New folders use URL fragments and do not require new HTML files. The repository also includes `start-local.cmd`, `tools/local_server.py`, and its tests so the PC helper can be restored from Git. GitHub Pages uses only the static site files. Keep `reference/`, backups, `.publisher/`, and `.deployment/` local; they are not part of the published site.
 
-After editing on your PC:
+After editing on your PC, select **Publish to GitHub → Commit and publish**. Use **Deployment status** to check when GitHub Pages finishes deploying, then refresh the site on your devices. Everything is read-only there by default.
 
-1. Click **Export for GitHub**. Your browser downloads `site-data.js` containing all pages, links, order, and uploaded images.
-2. Replace `site-data.js` in your repository with that downloaded file and commit/push it. If you maintain a local repository, replace the local file before committing. Do not overwrite the downloaded file with the old file from this project.
-3. Wait for the GitHub Pages deployment to finish, then reload the site on your devices. Everything is read-only there by default. A cached tab may need a refresh.
-
-GitHub Pages serves static files. Publishing runs only through the PC helper, which accepts same-origin requests with a per-run CSRF value; it does not accept requests from the hosted site or other websites. Manual export remains available. Editor mode is a browser preference, not authentication; anyone can open their own local editor, but they cannot change your published site without repository access. Published bookmarks and uploaded images are public.
+GitHub Pages serves static files. Publishing runs only through the PC helper, which accepts same-origin requests with a per-run CSRF value; it does not accept requests from the hosted site or other websites. Backup and Import backup preserve and restore a JSON copy of your bookmarks. Editor mode is a browser preference, not authentication; anyone can open their own local editor, but they cannot change your published site without repository access. Published bookmarks and uploaded images are public.
 
 When the published data changes, the editor starts from that version rather than applying a draft based on an older published version. Export a backup first if you want to preserve such a draft. Continue editing from a single PC browser/tab at a time.
 

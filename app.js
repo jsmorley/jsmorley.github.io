@@ -85,7 +85,7 @@
     validState(next);
     try { await persist(next); }
     catch (error) { throw Error('Changes were not saved. ' + error.message); }
-    state = next; render(); status('Saved on this browser · Export for GitHub to update other devices');
+    state = next; render(); status('Saved on this browser · Publish to GitHub to update other devices');
   }
   function linkFor(item) { return item.folder ? '#' + encodeURIComponent(item.folder) : item.url; }
   function render() {
@@ -320,10 +320,6 @@
   $('organize').onclick = () => { organizing = !organizing; render(); status(organizing ? 'Drag handles to reorder, or use the arrow buttons. Changes save automatically.' : 'Order saved on this browser'); };
   $('add-item').onclick = () => editItem(); $('manage').onclick = manageFolders;
   $('publish').onclick = publishPanel;
-  $('export').onclick = () => {
-    download('site-data.js', '// Published homepage data. Includes uploaded images.\nwindow.HOMEPAGE_PUBLISHED = ' + JSON.stringify(state, null, 2) + ';\n', 'text/javascript');
-    status('Downloaded site-data.js · Replace this file in your GitHub repository and commit it to publish.');
-  };
   $('backup').onclick = () => download('homepage-backup.json', JSON.stringify(state, null, 2), 'application/json');
   $('import').onclick = () => $('import-file').click();
   $('import-file').onchange = run(async e => {
