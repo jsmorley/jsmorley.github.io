@@ -332,7 +332,7 @@
   $('readonly').onclick = () => {
     editing = false; organizing = false;
     try { localStorage.removeItem('homepage-editor'); } catch { /* private browsing */ }
-    location.assign('https://jsmorley.github.io/index.htm?view=readonly' + location.hash);
+    location.assign('https://jsmorley.github.io/index.htm' + location.hash);
   };
   window.addEventListener('hashchange', () => { organizing = false; render(); window.scrollTo(0, 0); });
   // Don't allow accidental file drops to navigate away from the editor.
@@ -340,7 +340,8 @@
   window.addEventListener('drop', e => { if (editing) e.preventDefault(); });
   async function initialize() {
     const forceReadOnly = new URLSearchParams(location.search).get('view') === 'readonly';
-    try { editing = !forceReadOnly && (new URLSearchParams(location.search).get('edit') === '1' || localStorage.getItem('homepage-editor') === '1'); }
+    const onPC = ['localhost', '127.0.0.1'].includes(location.hostname);
+    try { editing = !forceReadOnly && (new URLSearchParams(location.search).get('edit') === '1' || (onPC && localStorage.getItem('homepage-editor') === '1')); }
     catch { editing = !forceReadOnly && new URLSearchParams(location.search).get('edit') === '1'; }
     if (forceReadOnly) {
       try { localStorage.removeItem('homepage-editor'); } catch { /* private browsing */ }
