@@ -22,6 +22,14 @@ Changes save in this browser's IndexedDB, with localStorage as a fallback. Brows
 
 ## Publish to jsmorley.github.io
 
+### Publish directly from the editor
+
+Select **Publish to GitHub**, enter your token, and select **Commit and publish**. This commits only `site-data.js` to `master`, including all your edited entries and embedded uploaded images. GitHub Pages then deploys the change. The panel checks for newer published bookmarks and refuses to overwrite them. The token is kept only in this tab's memory, never in browser storage, exported files, or the repository; reloading or choosing Read-only view clears it.
+
+Create a token at https://github.com/settings/personal-access-tokens/new. Set the resource owner to `jsmorley`, choose **Only select repositories → jsmorley.github.io**, and grant **Contents → Read and write** under repository permissions. Choose an expiration date, generate the token, and copy it securely. Enter it in the Publish panel, not in chat. No account or workflow permissions are needed for this feature.
+
+### Initial deployment or manual export
+
 For the first deployment, copy these files and directories into the root of your `jsmorley.github.io` repository and commit/push them:
 
 ```
@@ -30,6 +38,7 @@ index.htm
 editor.html
 app.css
 app.js
+publisher.js
 seed.js
 site-data.js
 favicon.ico
@@ -54,7 +63,7 @@ After editing on your PC:
 2. Replace `site-data.js` in your repository with that downloaded file and commit/push it. If you maintain a local repository, replace the local file before committing. Do not overwrite the downloaded file with the old file from this project.
 3. Wait for the GitHub Pages deployment to finish, then reload the site on your devices. Everything is read-only there by default. A cached tab may need a refresh.
 
-GitHub Pages serves static files and cannot write changes back to GitHub. Exporting downloads a file; committing it publishes it. No GitHub token is stored or requested. Editor mode is a browser preference, not authentication; anyone can open their own local editor, but they cannot change your published site without repository access. Published bookmarks and uploaded images are public.
+GitHub Pages serves static files. The editor's publishing feature uses the GitHub API and your repository-scoped token to create a commit. Manual export remains available without a token. Editor mode is a browser preference, not authentication; anyone can open their own local editor, but they cannot change your published site without repository access. Published bookmarks and uploaded images are public.
 
 When the published data changes, the editor starts from that version rather than applying a draft based on an older published version. Export a backup first if you want to preserve such a draft. Continue editing from a single PC browser/tab at a time.
 

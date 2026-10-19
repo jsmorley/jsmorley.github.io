@@ -3,7 +3,9 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const clone = value => JSON.parse(JSON.stringify(value));
-  const source = window.HOMEPAGE_PUBLISHED || window.HOMEPAGE_SEED;
+  let source = window.HOMEPAGE_PUBLISHED || window.HOMEPAGE_SEED;
+  let expectedPublished = clone(window.HOMEPAGE_PUBLISHED || null);
+  let githubToken = '';
   const sourceJSON = JSON.stringify(source);
   let hash = 0;
   for (let i = 0; i < sourceJSON.length; i++) hash = ((hash << 5) - hash + sourceJSON.charCodeAt(i)) | 0;
@@ -67,7 +69,7 @@
     });
   }
   async function persist(next) {
-    const record = { base, state: next };
+    const record = { base, state: next, expectedPublished };
     if (database) {
       await new Promise((resolve, reject) => {
         const tx = database.transaction('settings', 'readwrite');
@@ -165,9 +167,10 @@
     focusBefore = document.activeElement;
     $('panel-title').textContent = title; $('fields').replaceChildren(); $('form-error').textContent = '';
     $('save').hidden = false; $('delete').hidden = true; formAction = null;
+    $('save').textContent = 'Save';
     if (!$('panel').open) $('panel').showModal();
   }
-  function closePanel() { $('panel').close(); focusBefore?.isConnected && focusBefore.focus(); }
+  function closePanel() { $('panel').querySelectorAll('input[type="password"]').forEach(input => { input.value = ''; }); $('panel').close(); focusBefore?.isConnected && focusBefore.focus(); }
   function field(label, value = '', type = 'text') {
     const id = uid(); const l = element('label', label); l.htmlFor = id;
     const input = element('input'); input.id = id; input.type = type; input.value = value; input.required = true;
@@ -284,6 +287,25 @@
     const url = URL.createObjectURL(new Blob([content], { type }));
     const a = element('a'); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000);
   }
+  function publishPanel() {
+    openPanel('Publish to GitHub');
+    $('save').textContent = 'Commit and publish';
+    $('fields').append(element('p', 'Publish your current draft, including uploaded images, to jsmorley/jsmorley.github.io on master. GitHub Pages will update the site after deployment.', 'help'));
+    const token = field('GitHub token', githubToken, 'password'); token.autocomplete = 'off'; token.spellcheck = false;
+    const help = element('p', 'Use a fine-grained token limited to this repository with Contents: Read and write. The token stays in this tab’s memory until reload or Read-only view; it is never included in a backup or commit.', 'help'); $('fields').append(help);
+    const setup = element('a', 'Create a fine-grained GitHub token'); setup.href = 'https://github.com/settings/personal-access-tokens/new'; setup.target = '_blank'; setup.rel = 'noopener noreferrer'; $('fields').append(setup);
+    const message = field('Commit message', 'Update homepage bookmarks from editor');
+    formAction = async () => {
+      const snapshot = clone(state);
+      const result = await window.HomepagePublisher.publish({ token: token.value, state: snapshot, expected: expectedPublished, message: message.value });
+      githubToken = token.value.trim(); token.value = '';
+      expectedPublished = clone(snapshot); source = clone(snapshot);
+      try { await persist(snapshot); } catch { /* The commit succeeded; the previously saved draft remains available. */ }
+      closePanel();
+      status(result.unchanged ? 'This draft is already committed to GitHub.' : 'Committed ' + result.commit.slice(0, 7) + ' to master · GitHub Pages is deploying your changes.');
+      if (result.url) { const a = element('a', ' View commit'); a.href = result.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; $('save-status').append(a); }
+    };
+  }
   $('editor-form').addEventListener('submit', async e => {
     e.preventDefault(); if (!formAction) return;
     $('save').disabled = true; $('form-error').textContent = '';
@@ -293,6 +315,7 @@
   $('close').onclick = closePanel; $('cancel').onclick = closePanel;
   $('organize').onclick = () => { organizing = !organizing; render(); status(organizing ? 'Drag handles to reorder, or use the arrow buttons. Changes save automatically.' : 'Order saved on this browser'); };
   $('add-item').onclick = () => editItem(); $('manage').onclick = manageFolders;
+  $('publish').onclick = publishPanel;
   $('export').onclick = () => {
     download('site-data.js', '// Published homepage data. Includes uploaded images.\nwindow.HOMEPAGE_PUBLISHED = ' + JSON.stringify(state, null, 2) + ';\n', 'text/javascript');
     status('Downloaded site-data.js · Replace this file in your GitHub repository and commit it to publish.');
@@ -307,7 +330,7 @@
     } finally { e.target.value = ''; }
   });
   $('readonly').onclick = () => {
-    editing = false; organizing = false;
+    editing = false; organizing = false; githubToken = '';
     try { localStorage.removeItem('homepage-editor'); } catch { /* private browsing */ }
     history.replaceState(null, '', location.pathname + location.hash);
     state = clone(source); render(); $('notice').hidden = true;
@@ -327,7 +350,7 @@
       try { database = await openDB(); record = await dbRead(); }
       catch { try { record = JSON.parse(localStorage.getItem(storageKey)); } catch { /* use published data */ } }
       if (record?.base === base) {
-        try { state = validState(record.state); status('Local draft loaded · Export for GitHub to update other devices'); }
+        try { state = validState(record.state); if (Object.hasOwn(record, 'expectedPublished')) expectedPublished = record.expectedPublished; status('Local draft loaded · Publish to GitHub to update other devices'); }
         catch { status('The saved draft was unreadable. Published data loaded.'); }
       } else status(record ? 'New published version loaded. An older browser draft was not applied.' : 'Editor enabled on this browser · Edits save locally');
     }
