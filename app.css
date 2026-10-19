@@ -2,13 +2,14 @@
 [hidden] { display: none !important; }
 body { margin: 8px; background: #000; color: #eaf5ff; font: 18px "Segoe UI", Arial, Helvetica, sans-serif; }
 a { color: #eaf5ff; text-decoration: none; }
-#open-editor { position: fixed; top: 12px; right: 18px; z-index: 5; padding: 7px 14px; background: #20262d; border: 1px solid #46515e; border-radius: 6px; font-size: 14px; }
+#open-editor { position: fixed; top: 12px; right: 18px; z-index: 5; padding: 3px 7px; background: #20262d; border: 1px solid #46515e; border-radius: 4px; font-size: 11px; }
 #open-editor:hover { background: #35404d; }
 button, input, select { font: inherit; }
-button, .toolbar-button { background: #20262d; color: #eaf5ff; border: 1px solid #46515e; border-radius: 6px; padding: 8px 12px; cursor: pointer; }
+button, .toolbar-button { background: #20262d; color: #eaf5ff; border: 1px solid #46515e; border-radius: 4px; padding: 4px 6px; font-size: 13px; cursor: pointer; }
 button:hover, .toolbar-button:hover { background: #35404d; }
 button:focus-visible, a:focus-visible, input:focus-visible, .drop-zone:focus-within { outline: 2px solid #9cd2ff; outline-offset: 3px; }
-#toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 22px; border-bottom: 1px solid #28313b; font-size: 14px; }
+#toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; padding: 6px 22px; border-bottom: 1px solid #28313b; font-size: 14px; }
+#toolbar button, #toolbar .toolbar-button { font-size: 11px; }
 #page-label { margin-right: auto; }
 #save-status { width: 100%; font-size: 12px; color: #a1b0be; }
 #grid { display: grid; grid-template-columns: repeat(auto-fill, 200px); grid-auto-rows: 178px; gap: 15px; margin: 60px 0 20px 30px; padding-right: 15px; }
@@ -16,12 +17,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, .drop-zone:focus-wit
 .tile .tile-image { display: block; width: 200px; height: 125px; object-fit: contain; opacity: .75; }
 .tile a:hover .tile-image, .tile a:focus-visible .tile-image { opacity: 1; }
 .tile p { margin: 18px 0 0; font-size: 18px; line-height: 23px; overflow-wrap: anywhere; }
-.tile .more { position: absolute; right: 0; top: 0; min-height: 34px; min-width: 36px; padding: 0 7px; font-weight: bold; background: #18212be8; }
+.tile .more { position: absolute; right: 0; top: 0; min-height: 22px; min-width: 24px; padding: 0 4px; font-size: 11px; font-weight: bold; background: #18212be8; }
 .tile .text-links { font-size: 22px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
 .text-link { position: relative; padding-right: 22px; }
-.text-link .more { position: static; font-size: 12px; min-width: 24px; min-height: 24px; padding: 0; margin-left: 4px; }
+.text-link .more { position: static; font-size: 9px; min-width: 18px; min-height: 18px; padding: 0; margin-left: 4px; }
 .reorder-controls { display: flex; position: absolute; top: 87px; left: 6px; right: 6px; justify-content: center; gap: 4px; z-index: 2; }
-.reorder-controls button { font-size: 14px; padding: 5px 9px; }
+.reorder-controls button { font-size: 11px; padding: 3px 5px; }
 .drag-handle { touch-action: none; cursor: grab; }
 .organizing .tile:not(.back) { outline: 1px dashed #657b90; outline-offset: 3px; }
 .tile.dragging { opacity: .4; }
