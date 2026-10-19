@@ -5,7 +5,7 @@
   const clone = value => JSON.parse(JSON.stringify(value));
   let source = window.HOMEPAGE_PUBLISHED || window.HOMEPAGE_SEED;
   let expectedPublished = clone(window.HOMEPAGE_PUBLISHED || null);
-  let githubToken = '';
+  let localHelper = false;
   const sourceJSON = JSON.stringify(source);
   let hash = 0;
   for (let i = 0; i < sourceJSON.length; i++) hash = ((hash << 5) - hash + sourceJSON.charCodeAt(i)) | 0;
@@ -94,6 +94,7 @@
     $('page-label').textContent = p.title;
     $('toolbar').hidden = !editing;
     $('open-editor').hidden = editing || !editorDevice;
+    $('open-editor').href = 'http://localhost:4000/editor.html';
     $('grid').classList.toggle('organizing', organizing);
     $('organize').textContent = organizing ? 'Done organizing' : 'Organize';
     $('grid').replaceChildren();
@@ -291,14 +292,17 @@
     openPanel('Publish to GitHub');
     $('save').textContent = 'Commit and publish';
     $('fields').append(element('p', 'Publish your current draft, including uploaded images, to jsmorley/jsmorley.github.io on master. GitHub Pages will update the site after deployment.', 'help'));
-    const token = field('GitHub token', githubToken, 'password'); token.autocomplete = 'off'; token.spellcheck = false;
-    const help = element('p', 'Use a fine-grained token limited to this repository with Contents: Read and write. The token stays in this tab’s memory until reload or Read-only view; it is never included in a backup or commit.', 'help'); $('fields').append(help);
-    const setup = element('a', 'Create a fine-grained GitHub token'); setup.href = 'https://github.com/settings/personal-access-tokens/new'; setup.target = '_blank'; setup.rel = 'noopener noreferrer'; $('fields').append(setup);
+    if (!localHelper) {
+      $('save').hidden = true;
+      $('fields').append(element('p', 'Start start-local.cmd in C:\\MyHomePage on your PC, with Pageant running, then open your PC editor. It publishes using your SSH key without a token.', 'help'));
+      const open = element('a', 'Open PC editor'); open.href = 'http://localhost:4000/editor.html'; $('fields').append(open);
+      return;
+    }
+    $('fields').append(element('p', 'Connected to your PC helper. Publishing uses your GitHub SSH key through Pageant. No token needed.', 'help'));
     const message = field('Commit message', 'Update homepage bookmarks from editor');
     formAction = async () => {
       const snapshot = clone(state);
-      const result = await window.HomepagePublisher.publish({ token: token.value, state: snapshot, expected: expectedPublished, message: message.value });
-      githubToken = token.value.trim(); token.value = '';
+      const result = await window.HomepagePublisher.publish({ state: snapshot, expected: expectedPublished, message: message.value });
       expectedPublished = clone(snapshot); source = clone(snapshot);
       try { await persist(snapshot); } catch { /* The commit succeeded; the previously saved draft remains available. */ }
       closePanel();
@@ -330,7 +334,7 @@
     } finally { e.target.value = ''; }
   });
   $('readonly').onclick = () => {
-    editing = false; organizing = false; githubToken = '';
+    editing = false; organizing = false;
     try { localStorage.removeItem('homepage-editor'); } catch { /* private browsing */ }
     history.replaceState(null, '', location.pathname + location.hash);
     state = clone(source); render(); $('notice').hidden = true;
@@ -344,6 +348,7 @@
     catch { editing = new URLSearchParams(location.search).get('edit') === '1'; }
     try { editorDevice = localStorage.getItem('homepage-editor-device') === '1'; } catch { /* storage unavailable */ }
     if (editing) {
+      localHelper = await window.HomepagePublisher.localStatus();
       editorDevice = true;
       try { localStorage.setItem('homepage-editor', '1'); localStorage.setItem('homepage-editor-device', '1'); } catch { /* storage fallback below */ }
       let record;

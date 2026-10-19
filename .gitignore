@@ -1,0 +1,6 @@
+.deployment/
+.publisher/
+backups/
+__pycache__/
+*.pyc
+*.tmp

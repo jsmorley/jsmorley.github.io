@@ -4,11 +4,11 @@ A buildless, static recreation of https://jsmorley.github.io/index.htm. The orig
 
 ## Run on your PC
 
-Double-click `start-local.cmd`, then open http://localhost:4000. Keep the server window open while using the site. Python 3 is already installed on this PC. You can also open `index.html` directly; using the local server gives browser storage a consistent address.
+Keep Pageant running with your GitHub key loaded. Double-click `start-local.cmd`, then open http://localhost:4000/editor.html. Keep the helper window open while using the editor. Python 3, Git, and PuTTY are already installed on this PC. The helper serves only the site files on the loopback interface and uses Pageant for GitHub SSH authentication.
 
 The default view is read-only. Open http://localhost:4000/editor.html to enable editing in that PC browser. Bookmark this editor address. Once enabled, editing stays enabled in that browser until you select **Read-only view**. Read-only view shows the published data; reopening the editor restores your unpublished draft.
 
-After you open the editor once, that browser remembers it is your editing device. In read-only view, a small **Edit** button appears in the upper right and opens `editor.html`. Other browsers and devices do not show this button until you explicitly open the editor there. Browser preferences are specific to each address: on the published site, open https://jsmorley.github.io/editor.html once on your PC to enable its button. Clearing browser site data also clears this preference.
+After you open the editor once, that browser remembers it is your editing device. In read-only view, a small **Edit** button appears in the upper right and opens http://localhost:4000/editor.html. Other browsers and devices do not show this button until you explicitly open the editor there. Browser preferences are specific to each address: on the published site, open https://jsmorley.github.io/editor.html once on your PC to enable its button. Clearing browser site data also clears this preference.
 
 ## Edit
 
@@ -24,9 +24,9 @@ Changes save in this browser's IndexedDB, with localStorage as a fallback. Brows
 
 ### Publish directly from the editor
 
-Select **Publish to GitHub**, enter your token, and select **Commit and publish**. This commits only `site-data.js` to `master`, including all your edited entries and embedded uploaded images. GitHub Pages then deploys the change. The panel checks for newer published bookmarks and refuses to overwrite them. The token is kept only in this tab's memory, never in browser storage, exported files, or the repository; reloading or choosing Read-only view clears it.
+In the local PC editor, select **Publish to GitHub**, optionally adjust the commit message, and select **Commit and publish**. No token is required. The helper commits only `site-data.js` to `master`, including all your edited entries and embedded uploaded images, and pushes over SSH using Pageant. GitHub Pages then deploys the change. The helper checks for newer published bookmarks and refuses to overwrite them; it never force-pushes. If a push is interrupted after the commit, retrying pushes the existing commit.
 
-Create a token at https://github.com/settings/personal-access-tokens/new. Set the resource owner to `jsmorley`, choose **Only select repositories → jsmorley.github.io**, and grant **Contents → Read and write** under repository permissions. Choose an expiration date, generate the token, and copy it securely. Enter it in the Publish panel, not in chat. No account or workflow permissions are needed for this feature.
+The helper maintains its own checkout under `.publisher/repository` and refreshes published data when started. Do not edit this checkout manually. It uses `C:\Program Files\PuTTY\plink.exe -batch` and the existing Pageant key. Keep Pageant running. The hosted editor directs you to the PC editor for publishing. Your draft belongs to the browser and address where you edited it; use Backup and Import backup to move an unpublished draft between the hosted and local editors if needed.
 
 ### Initial deployment or manual export
 
@@ -55,7 +55,7 @@ PicturesFolder.htm
 UZAFolder.htm
 ```
 
-`index.html` is the normal GitHub Pages entry point; `index.htm` and the original folder addresses also work. New folders use URL fragments and do not require new HTML files. `reference/` and `tools/` are source/import aids; do not publish them. `start-local.cmd`, this README, and tests do not need to be deployed.
+`index.html` is the normal GitHub Pages entry point; `index.htm` and the original folder addresses also work. New folders use URL fragments and do not require new HTML files. The repository also includes `start-local.cmd`, `tools/local_server.py`, and its tests so the PC helper can be restored from Git. GitHub Pages uses only the static site files. Keep `reference/`, backups, `.publisher/`, and `.deployment/` local; they are not part of the published site.
 
 After editing on your PC:
 
@@ -63,7 +63,7 @@ After editing on your PC:
 2. Replace `site-data.js` in your repository with that downloaded file and commit/push it. If you maintain a local repository, replace the local file before committing. Do not overwrite the downloaded file with the old file from this project.
 3. Wait for the GitHub Pages deployment to finish, then reload the site on your devices. Everything is read-only there by default. A cached tab may need a refresh.
 
-GitHub Pages serves static files. The editor's publishing feature uses the GitHub API and your repository-scoped token to create a commit. Manual export remains available without a token. Editor mode is a browser preference, not authentication; anyone can open their own local editor, but they cannot change your published site without repository access. Published bookmarks and uploaded images are public.
+GitHub Pages serves static files. Publishing runs only through the PC helper, which accepts same-origin requests with a per-run CSRF value; it does not accept requests from the hosted site or other websites. Manual export remains available. Editor mode is a browser preference, not authentication; anyone can open their own local editor, but they cannot change your published site without repository access. Published bookmarks and uploaded images are public.
 
 When the published data changes, the editor starts from that version rather than applying a draft based on an older published version. Export a backup first if you want to preserve such a draft. Continue editing from a single PC browser/tab at a time.
 
