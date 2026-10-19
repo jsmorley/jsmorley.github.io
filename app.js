@@ -332,15 +332,20 @@
   $('readonly').onclick = () => {
     editing = false; organizing = false;
     try { localStorage.removeItem('homepage-editor'); } catch { /* private browsing */ }
-    location.assign('https://jsmorley.github.io/index.htm' + location.hash);
+    location.assign('https://jsmorley.github.io/index.htm?view=readonly' + location.hash);
   };
   window.addEventListener('hashchange', () => { organizing = false; render(); window.scrollTo(0, 0); });
   // Don't allow accidental file drops to navigate away from the editor.
   window.addEventListener('dragover', e => { if (editing) e.preventDefault(); });
   window.addEventListener('drop', e => { if (editing) e.preventDefault(); });
   async function initialize() {
-    try { editing = new URLSearchParams(location.search).get('edit') === '1' || localStorage.getItem('homepage-editor') === '1'; }
-    catch { editing = new URLSearchParams(location.search).get('edit') === '1'; }
+    const forceReadOnly = new URLSearchParams(location.search).get('view') === 'readonly';
+    try { editing = !forceReadOnly && (new URLSearchParams(location.search).get('edit') === '1' || localStorage.getItem('homepage-editor') === '1'); }
+    catch { editing = !forceReadOnly && new URLSearchParams(location.search).get('edit') === '1'; }
+    if (forceReadOnly) {
+      try { localStorage.removeItem('homepage-editor'); } catch { /* private browsing */ }
+      history.replaceState(null, '', location.pathname + location.hash);
+    }
     try { editorDevice = localStorage.getItem('homepage-editor-device') === '1'; } catch { /* storage unavailable */ }
     if (editing) {
       localHelper = await window.HomepagePublisher.localStatus();
