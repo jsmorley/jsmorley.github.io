@@ -88,6 +88,13 @@
     state = next; render(); status('Saved on this browser · Publish to GitHub to update other devices');
   }
   function linkFor(item) { return item.folder ? '#' + encodeURIComponent(item.folder) : item.url; }
+  function tileImage(source, title) {
+    const img = element('img', undefined, 'tile-image');
+    img.alt = title;
+    img.addEventListener('error', () => { img.src = 'Images/missing-image.jpg'; }, { once: true });
+    img.src = source || 'Images/missing-image.jpg';
+    return img;
+  }
   function render() {
     const p = page();
     document.title = p.title;
@@ -102,7 +109,7 @@
     if (p.id !== state.home) {
       const tile = element('article', undefined, 'tile back');
       const a = element('a'); a.href = '#' + encodeURIComponent(p.parent || state.home); a.setAttribute('aria-label', 'Back to parent folder');
-      const img = element('img', undefined, 'tile-image'); img.src = p.backImage || 'Images/home.jpg'; img.alt = 'Back'; a.append(img); tile.append(a); $('grid').append(tile);
+      a.append(tileImage(p.backImage || 'Images/home.jpg', 'Back')); tile.append(a); $('grid').append(tile);
     }
     for (const item of p.items) {
       const tile = element('article', undefined, 'tile'); tile.dataset.id = item.id;
@@ -116,8 +123,7 @@
         }); tile.append(links);
       } else {
         const a = element('a'); a.href = linkFor(item);
-        if (item.image) { const img = element('img', undefined, 'tile-image'); img.src = item.image; img.alt = item.title; a.append(img); }
-        else { const placeholder = element('div', item.folder ? '📁' : '↗', 'tile-image'); placeholder.style.fontSize = '80px'; a.append(placeholder); }
+        a.append(tileImage(item.image, item.title));
         a.append(element('p', item.title)); tile.append(a);
         if (editing && !organizing) { const b = button('…', () => editItem(item), 'more'); b.setAttribute('aria-label', 'Edit ' + item.title); tile.append(b); }
       }
