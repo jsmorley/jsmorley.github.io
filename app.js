@@ -332,8 +332,7 @@
   $('readonly').onclick = () => {
     editing = false; organizing = false;
     try { localStorage.removeItem('homepage-editor'); } catch { /* private browsing */ }
-    history.replaceState(null, '', location.pathname + location.hash);
-    state = clone(source); render(); $('notice').hidden = true;
+    location.assign('https://jsmorley.github.io/index.htm' + location.hash);
   };
   window.addEventListener('hashchange', () => { organizing = false; render(); window.scrollTo(0, 0); });
   // Don't allow accidental file drops to navigate away from the editor.
