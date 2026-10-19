@@ -82,7 +82,7 @@ window.HOMEPAGE_PUBLISHED = {
           "id": "index.htm-10"
         },
         {
-          "title": "NexusMods",
+          "title": "Nexus Mods",
           "url": "https://www.nexusmods.com/fallout4/mods/newrecently",
           "image": "Images/nexusmods.jpg",
           "id": "index.htm-11"
