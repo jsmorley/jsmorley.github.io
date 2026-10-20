@@ -101,7 +101,7 @@
     $('page-label').textContent = p.title;
     $('toolbar').hidden = !editing;
     $('open-editor').hidden = editing || !editorDevice;
-    $('open-editor').href = 'http://localhost:4000/editor.html';
+    $('open-editor').href = 'http://localhost:5000/editor.html';
     $('grid').classList.toggle('organizing', organizing);
     $('organize').textContent = organizing ? 'Done organizing' : 'Organize';
     $('grid').replaceChildren();
@@ -301,7 +301,7 @@
     if (!localHelper) {
       $('save').hidden = true;
       $('fields').append(element('p', 'Start start-local.cmd in C:\\MyHomePage on your PC, with Pageant running, then open your PC editor. It publishes using your SSH key without a token.', 'help'));
-      const open = element('a', 'Open PC editor'); open.href = 'http://localhost:4000/editor.html'; $('fields').append(open);
+      const open = element('a', 'Open PC editor'); open.href = 'http://localhost:5000/editor.html'; $('fields').append(open);
       return;
     }
     $('fields').append(element('p', 'Connected to your PC helper. Publishing uses your GitHub SSH key through Pageant. No token needed.', 'help'));

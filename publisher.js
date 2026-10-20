@@ -14,7 +14,7 @@
     } catch { return false; }
   }
   async function publish({state, expected, message, fetcher = fetch}) {
-    if (!csrf) throw Error('Start start-local.cmd on your PC, then open http://localhost:4000/editor.html.');
+    if (!csrf) throw Error('Start start-local.cmd on your PC, then open http://localhost:5000/editor.html.');
     let response;
     try {
       response = await fetcher('/__local/publish', {

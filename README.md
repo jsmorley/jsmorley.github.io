@@ -4,11 +4,11 @@ A buildless, static recreation of https://jsmorley.github.io/index.htm. The orig
 
 ## Run on your PC
 
-Keep Pageant running with your GitHub key loaded. Double-click `start-local.cmd`, then open http://localhost:4000/editor.html. Keep the helper window open while using the editor. Python 3, Git, and PuTTY are already installed on this PC. The helper serves only the site files on the loopback interface and uses Pageant for GitHub SSH authentication.
+Keep Pageant running with your GitHub key loaded. Double-click `start-local.cmd`, then open http://localhost:5000/editor.html. Keep the helper window open while using the editor. Python 3, Git, and PuTTY are already installed on this PC. The helper serves only the site files on the loopback interface and uses Pageant for GitHub SSH authentication.
 
-The default view is read-only. Open http://localhost:4000/editor.html to enable editing in that PC browser. Bookmark this editor address. Once enabled, editing stays enabled in that browser until you select **Read-only view**, which opens https://jsmorley.github.io/index.htm (keeping the current folder). Reopening the local editor restores your unpublished draft.
+The default view is read-only. Open http://localhost:5000/editor.html to enable editing in that PC browser. Bookmark this editor address. Once enabled, editing stays enabled in that browser until you select **Read-only view**, which opens https://jsmorley.github.io/index.htm (keeping the current folder). Reopening the local editor restores your unpublished draft.
 
-After you open the editor once, that browser remembers it is your editing device. In read-only view, a small **Edit** button appears in the upper right and opens http://localhost:4000/editor.html. Other browsers and devices do not show this button until you explicitly open the editor there. Browser preferences are specific to each address: on the published site, open https://jsmorley.github.io/editor.html once on your PC to enable its button. Clearing browser site data also clears this preference.
+After you open the editor once, that browser remembers it is your editing device. In read-only view, a small **Edit** button appears in the upper right and opens http://localhost:5000/editor.html. Other browsers and devices do not show this button until you explicitly open the editor there. Browser preferences are specific to each address: on the published site, open https://jsmorley.github.io/editor.html once on your PC to enable its button. Clearing browser site data also clears this preference.
 
 ## Edit
 
