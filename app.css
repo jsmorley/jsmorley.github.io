@@ -18,9 +18,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, .drop-zone:focus-wit
 .tile a:hover .tile-image, .tile a:focus-visible .tile-image { opacity: 1; }
 .tile p { margin: 18px 0 0; font-size: 18px; line-height: 23px; overflow-wrap: anywhere; }
 .tile .more { position: absolute; right: 0; top: 0; min-height: 22px; min-width: 24px; padding: 0 4px; font-size: 11px; font-weight: bold; background: #18212be8; }
-.tile .text-links { font-size: 22px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
-.text-link { position: relative; padding-right: 22px; }
-.text-link .more { position: static; font-size: 9px; min-width: 18px; min-height: 18px; padding: 0; margin-left: 4px; }
+.tile .text-links { width: 100%; height: 125px; padding: 8px; font-size: 18px; line-height: 22px; display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; }
+.text-link { position: relative; width: 100%; overflow-wrap: anywhere; }
+.text-link a { color: inherit; }
+.text-links.editable .text-link { padding-right: 22px; }
+.text-link .more { position: absolute; top: 50%; transform: translateY(-50%); font-size: 9px; min-width: 18px; min-height: 18px; padding: 0; }
+input[type="color"] { height: 42px; padding: 3px; cursor: pointer; }
 .reorder-controls { display: flex; position: absolute; top: 87px; left: 6px; right: 6px; justify-content: center; gap: 4px; z-index: 2; }
 .reorder-controls button { font-size: 11px; padding: 3px 5px; }
 .drag-handle { touch-action: none; cursor: grab; }
@@ -50,7 +53,7 @@ input, select { width: 100%; padding: 10px; border-radius: 5px; border: 1px soli
   .tile { width: 100%; }
   .tile .tile-image { width: 100%; }
   .tile p { font-size: 16px; }
-  .tile .text-links { font-size: 17px; gap: 12px; }
+  .tile .text-links { font-size: 16px; line-height: 20px; gap: 6px; }
   #toolbar { padding: 8px 0; }
 }
 @media(max-width: 260px) { #grid { grid-template-columns: 1fr; } }

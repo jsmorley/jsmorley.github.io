@@ -17,6 +17,7 @@
     try { return ['https:', 'http:'].includes(new URL(value).protocol); } catch { return false; }
   };
   const safeImage = value => typeof value === 'string' && (!value || /^Images\/[a-z0-9_. -]+$/i.test(value) || /^data:image\/(png|jpeg|gif|webp|avif|bmp);base64,[a-z0-9+/=\s]+$/i.test(value) || safeURL(value));
+  const safeColor = value => typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value);
   const uid = () => 'item-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
   const page = () => {
     let id;
@@ -45,6 +46,7 @@
       for (const i of p.items) {
         if (!i || typeof i.id !== 'string' || itemIds.has(i.id) || typeof i.title !== 'string' || !safeImage(i.image)) throw Error('Invalid item data.');
         itemIds.add(i.id);
+        if (i.backgroundColor !== undefined && !safeColor(i.backgroundColor)) throw Error('Invalid background color.');
         if (i.links) {
           if (!Array.isArray(i.links) || i.links.length > 100 || i.links.some(l => typeof l.title !== 'string' || !safeURL(l.url))) throw Error('Invalid text links.');
         } else if (!i.folder && !safeURL(i.url)) throw Error('Links must use HTTP or HTTPS.');
@@ -115,6 +117,11 @@
       const tile = element('article', undefined, 'tile'); tile.dataset.id = item.id;
       if (item.links && !item.image) {
         const links = element('div', undefined, 'text-links');
+        const background = safeColor(item.backgroundColor) ? item.backgroundColor : '#000000';
+        links.style.backgroundColor = background;
+        const rgb = [1, 3, 5].map(start => parseInt(background.slice(start, start + 2), 16) / 255).map(c => c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4);
+        links.style.color = .2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2] > .179 ? '#000000' : '#ffffff';
+        links.classList.toggle('editable', editing && !organizing);
         item.links.forEach((link, n) => {
           const row = element('div', undefined, 'text-link');
           const a = element('a', link.title); a.href = link.url; row.append(a);
@@ -217,6 +224,8 @@
     const url = item?.folder ? null : field('URL', link?.url || '', 'text');
     if (url) { url.placeholder = 'https://example.com'; url.autocapitalize = 'off'; url.spellcheck = false; }
     imageField(linkIndex !== undefined ? '' : item?.image);
+    const background = linkIndex !== undefined ? field('Text tile background color', item.backgroundColor || '#000000', 'color') : null;
+    if (background) $('fields').append(element('p', 'Fills the entire 200 × 125 text tile and applies to all links in this group. Text switches between black and white for readability.', 'help'));
     if (item?.folder) $('fields').append(element('p', 'This tile opens its folder. Rename or delete the page using Folders.', 'help'));
     if (item) {
       $('delete').hidden = false;
@@ -234,6 +243,7 @@
       const next = clone(state), items = next.pages.find(p => p.id === currentPageID).items;
       if (linkIndex !== undefined) {
         const group = items.find(i => i.id === item.id);
+        group.backgroundColor = background.value;
         if (imageValue) {
           group.links.splice(linkIndex, 1);
           const index = items.indexOf(group); items.splice(index + 1, 0, { id: uid(), title: title.value.trim(), url: url.value.trim(), image: imageValue });
