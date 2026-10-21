@@ -235,7 +235,7 @@ window.HOMEPAGE_PUBLISHED = {
           ],
           "image": "",
           "id": "RainmeterFolder.htm-3",
-          "backgroundColor": "#bd5a0a"
+          "backgroundColor": "#2683c4"
         },
         {
           "title": "Reference links",
@@ -255,7 +255,7 @@ window.HOMEPAGE_PUBLISHED = {
           ],
           "image": "",
           "id": "RainmeterFolder.htm-4",
-          "backgroundColor": "#bd5a0a"
+          "backgroundColor": "#2683c4"
         },
         {
           "title": "Rainmeter Releases",
