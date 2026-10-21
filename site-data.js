@@ -225,8 +225,8 @@ window.HOMEPAGE_PUBLISHED = {
           "title": "Reference links",
           "links": [
             {
-              "url": "https://docs.rainmeter.net/manual/",
-              "title": "Rainmeter Manual"
+              "title": "Rainmeter Manual",
+              "url": "https://docs.rainmeter.net/manual/"
             },
             {
               "url": "https://docs-v5.rainmeter.net/manual/",
@@ -234,14 +234,15 @@ window.HOMEPAGE_PUBLISHED = {
             }
           ],
           "image": "",
-          "id": "RainmeterFolder.htm-3"
+          "id": "RainmeterFolder.htm-3",
+          "backgroundColor": "#bd5a0a"
         },
         {
           "title": "Reference links",
           "links": [
             {
-              "url": "https://github.com/rainmeter/rainmeter/commits/master",
-              "title": "Rainmeter Commits"
+              "title": "Rainmeter Commits",
+              "url": "https://github.com/rainmeter/rainmeter/commits/master"
             },
             {
               "url": "https://github.com/rainmeter/rainmeter-docs/commits/master",
@@ -253,7 +254,8 @@ window.HOMEPAGE_PUBLISHED = {
             }
           ],
           "image": "",
-          "id": "RainmeterFolder.htm-4"
+          "id": "RainmeterFolder.htm-4",
+          "backgroundColor": "#bd5a0a"
         },
         {
           "title": "Rainmeter Releases",
