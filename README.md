@@ -4,7 +4,7 @@ A buildless, static recreation of https://jsmorley.github.io/index.htm. The orig
 
 ## Run on your PC
 
-Keep Pageant running with your GitHub key loaded. Double-click `start-local.cmd`, then open http://localhost:5000/editor.html. Keep the helper window open while using the editor. Python 3, Git, and PuTTY are already installed on this PC. The helper serves only the site files on the loopback interface and uses Pageant for GitHub SSH authentication.
+Double-click `local-start.cmd` to start the editor server hidden without opening a browser. Running it again reuses the existing server. Use the site's Edit button or open http://localhost:5000/editor.html when ready. Double-click `local-stop.cmd` to stop only this homepage server; save any edits and finish publishing first. The server does not start automatically at sign-in. Keep Pageant running with your GitHub key loaded when publishing; these launchers do not start or stop Pageant. Python 3, Git, and PuTTY are already installed on this PC. The helper serves only the site files on the loopback interface and uses Pageant for GitHub SSH authentication. Startup and server errors are recorded in `tools/local-server.stdout.log` and `tools/local-server.stderr.log`.
 
 The default view is read-only. Open http://localhost:5000/editor.html to enable editing in that PC browser. Bookmark this editor address. Once enabled, editing stays enabled in that browser until you select **Read-only view**, which opens https://jsmorley.github.io/index.htm (keeping the current folder). Reopening the local editor restores your unpublished draft.
 
@@ -55,7 +55,7 @@ PicturesFolder.htm
 UZAFolder.htm
 ```
 
-`index.html` is the normal GitHub Pages entry point; `index.htm` and the original folder addresses also work. New folders use URL fragments and do not require new HTML files. The repository also includes `start-local.cmd`, `tools/local_server.py`, and its tests so the PC helper can be restored from Git. GitHub Pages uses only the static site files. Keep `reference/`, backups, `.publisher/`, and `.deployment/` local; they are not part of the published site.
+`index.html` is the normal GitHub Pages entry point; `index.htm` and the original folder addresses also work. New folders use URL fragments and do not require new HTML files. The repository also includes `local-start.cmd`, `tools/local_server.py`, and its tests so the PC helper can be restored from Git. GitHub Pages uses only the static site files. Keep `reference/`, backups, `.publisher/`, and `.deployment/` local; they are not part of the published site.
 
 After editing on your PC, select **Publish to GitHub → Commit and publish**. Use **Deployment status** to check when GitHub Pages finishes deploying, then refresh the site on your devices. Everything is read-only there by default.
 

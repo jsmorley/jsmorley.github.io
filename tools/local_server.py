@@ -5,6 +5,7 @@ from pathlib import Path
 import secrets
 import shutil
 import subprocess
+import sys
 import threading
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import unquote, urlsplit
@@ -61,7 +62,7 @@ class GitPublisher:
 
     def command(self, *args, cwd=None):
         try:
-            result = subprocess.run([self.git, *args], cwd=cwd or self.repo, env=self.env, capture_output=True, encoding='utf-8', errors='replace', timeout=90)
+            result = subprocess.run([self.git, *args], cwd=cwd or self.repo, env=self.env, capture_output=True, encoding='utf-8', errors='replace', timeout=90, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
         except (OSError, subprocess.TimeoutExpired):
             raise PublishError('Git could not run or timed out. Check your connection and Pageant, then retry.', 503)
         if result.returncode:
@@ -121,7 +122,7 @@ class Handler(SimpleHTTPRequestHandler):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
     def authorized_host(self):
-        return self.headers.get('Host') in {'localhost:4000', '127.0.0.1:4000'}
+        return self.headers.get('Host') in {'localhost:5000', '127.0.0.1:5000'}
 
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store')
@@ -135,7 +136,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if not self.authorized_host():
-            return self.respond(403, {'error': 'Use http://localhost:4000.'})
+            return self.respond(403, {'error': 'Use http://localhost:5000.'})
         path = unquote(urlsplit(self.path).path)
         if path == '/__local/status':
             return self.respond(200, {'enabled': True, 'csrf': self.server.csrf, 'repository': 'jsmorley/jsmorley.github.io', 'authentication': 'Pageant'})
@@ -155,7 +156,7 @@ class Handler(SimpleHTTPRequestHandler):
         return self.respond(405, {'error': 'Use GET.'})
 
     def do_POST(self):
-        if not self.authorized_host() or self.headers.get('Origin') not in {'http://localhost:4000', 'http://127.0.0.1:4000'} or not secrets.compare_digest(self.headers.get('X-Homepage-CSRF', ''), self.server.csrf):
+        if not self.authorized_host() or self.headers.get('Origin') not in {'http://localhost:5000', 'http://127.0.0.1:5000'} or not secrets.compare_digest(self.headers.get('X-Homepage-CSRF', ''), self.server.csrf):
             return self.respond(403, {'error': 'Publishing is available only from this PC editor.'})
         if self.path != '/__local/publish' or self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
             return self.respond(400, {'error': 'Invalid publish request.'})
@@ -176,16 +177,20 @@ class Handler(SimpleHTTPRequestHandler):
             self.respond(500, {'error': 'Publishing failed. Your browser draft is unchanged. Check the helper window.'})
 
 def main():
+    if sys.stdout is None:
+        sys.stdout = (ROOT / 'tools' / 'local-server.stdout.log').open('a', encoding='utf-8', buffering=1)
+    if sys.stderr is None:
+        sys.stderr = (ROOT / 'tools' / 'local-server.stderr.log').open('a', encoding='utf-8', buffering=1)
     publisher = GitPublisher()
     try:
         print('Refreshing published data through Pageant...', flush=True)
         publisher.prepare()
     except PublishError as error:
         print(str(error) + ' You can still edit locally and retry publishing later.', flush=True)
-    server = ThreadingHTTPServer(('127.0.0.1', 4000), Handler)
+    server = ThreadingHTTPServer(('127.0.0.1', 5000), Handler)
     server.csrf = secrets.token_urlsafe(32)
     server.publisher = publisher
-    print('PC editor: http://localhost:4000/editor.html', flush=True)
+    print('PC editor: http://localhost:5000/editor.html', flush=True)
     print('Publishing uses Pageant. Keep this helper running; Ctrl+C stops it.', flush=True)
     try:
         server.serve_forever()

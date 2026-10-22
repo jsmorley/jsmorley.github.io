@@ -3,7 +3,7 @@ const {publish,localStatus,serialize} = require('../publisher.js');
 const ok = value => ({ok:true,json:async()=>value});
 (async()=>{
   assert.equal(await localStatus(()=>assert.fail('Public site must not contact helper'),'jsmorley.github.io'),false);
-  await assert.rejects(publish({state:{},expected:null,message:'Test'}),/Start start-local/);
+  await assert.rejects(publish({state:{},expected:null,message:'Test'}),/Start local-start/);
   assert.equal(await localStatus(async()=>ok({enabled:true,csrf:'test-csrf'}),'localhost'),true);
   const state={title:'Café 日本語'};
   const result=await publish({state,expected:null,message:'Test',fetcher:async(url,options)=>{

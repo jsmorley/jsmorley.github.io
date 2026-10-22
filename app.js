@@ -310,7 +310,7 @@
     $('fields').append(element('p', 'Publish your current draft, including uploaded images, to jsmorley/jsmorley.github.io on master. GitHub Pages will update the site after deployment.', 'help'));
     if (!localHelper) {
       $('save').hidden = true;
-      $('fields').append(element('p', 'Start start-local.cmd in C:\\MyHomePage on your PC, with Pageant running, then open your PC editor. It publishes using your SSH key without a token.', 'help'));
+      $('fields').append(element('p', 'Start local-start.cmd in C:\\MyHomePage on your PC, with Pageant running, then open your PC editor. It publishes using your SSH key without a token.', 'help'));
       const open = element('a', 'Open PC editor'); open.href = 'http://localhost:5000/editor.html'; $('fields').append(open);
       return;
     }

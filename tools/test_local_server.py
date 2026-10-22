@@ -16,16 +16,16 @@ class PublisherTests(unittest.TestCase):
         handler.server = SimpleNamespace(csrf='expected-secret', publisher=Mock())
         handler.respond = Mock()
         handler.path = '/__local/publish'
-        handler.headers = {'Host':'localhost:4000','Origin':'https://unrelated.example','X-Homepage-CSRF':'expected-secret'}
+        handler.headers = {'Host':'localhost:5000','Origin':'https://unrelated.example','X-Homepage-CSRF':'expected-secret'}
         handler.do_POST(); self.assertEqual(handler.respond.call_args.args[0],403)
-        handler.headers['Origin'] = 'http://localhost:4000'
+        handler.headers['Origin'] = 'http://localhost:5000'
         handler.headers['X-Homepage-CSRF'] = 'wrong'
         handler.do_POST(); self.assertEqual(handler.respond.call_args.args[0],403)
-        handler.headers['Host'] = 'unrelated.example:4000'
+        handler.headers['Host'] = 'unrelated.example:5000'
         handler.headers['X-Homepage-CSRF'] = 'expected-secret'
         handler.do_POST(); self.assertEqual(handler.respond.call_args.args[0],403)
         handler.server.publisher.publish.assert_not_called()
-        handler.headers = {'Host':'localhost:4000'}
+        handler.headers = {'Host':'localhost:5000'}
         for path in ['/backups/original.zip','/.publisher/repository/.git/config','/.deployment/repository/.git/config','/tools/local_server.py','/Images/../.git/config']:
             handler.path = path; handler.do_GET(); self.assertEqual(handler.respond.call_args.args[0],404)
 
