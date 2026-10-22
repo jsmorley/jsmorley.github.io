@@ -105,12 +105,6 @@ window.HOMEPAGE_PUBLISHED = {
           "url": "http://x.com/home",
           "image": "Images/x.jpg",
           "id": "index.htm-14"
-        },
-        {
-          "title": "YouTube",
-          "url": "https://www.youtube.com/",
-          "image": "Images/vid_YouTube.png",
-          "id": "index.htm-15"
         }
       ]
     },
