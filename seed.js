@@ -70,7 +70,7 @@ window.HOMEPAGE_SEED = {
         {
           "title": "Monumental",
           "url": "https://www.monumentalsportsnetwork.com/",
-          "image": "Images/MonumentalSports.jpg",
+          "image": "Images/MonumentalSports.png",
           "id": "index.htm-9"
         },
         {

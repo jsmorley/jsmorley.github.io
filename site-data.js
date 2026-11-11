@@ -71,7 +71,7 @@ window.HOMEPAGE_PUBLISHED = {
         {
           "title": "Monumental NHL",
           "url": "https://www.monumentalsportsnetwork.com/",
-          "image": "Images/MonumentalSports.jpg",
+          "image": "Images/MonumentalSports.png",
           "id": "index.htm-9"
         },
         {
